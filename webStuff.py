@@ -5,7 +5,8 @@ from dotenv import load_dotenv
 
 def getImgUrl():
     load_dotenv()
-    key = os.getenv('GOOGLE_KEY')
+    # key = os.getenv('GOOGLE_KEY')
+    key = os.environ["GOOGLE_TOKEN"]
     _url = "https://www.googleapis.com/customsearch/v1"
     offset = random.randint(1,100)
     _params = {'key':key,'q':"dog",'num':'1','start':offset,'searchType':"image",'cx':"4426fb15ed7f0c118"}
