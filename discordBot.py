@@ -1,41 +1,49 @@
 import os
 import random
 import discord
+from discord.ext import commands
 import webStuff
+import youtubeDownloader
 from dotenv import load_dotenv
 
 load_dotenv()
-# TOKEN = os.getenv('DISCORD_TOKEN')
 TOKEN = os.environ["DISCORD_TOKEN"]
 
-client = discord.Client()
+bot = commands.Bot(command_prefix='$')
 intents = discord.Intents.default()
 intents.messages = True
 
-prechar = '$'
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'{client.user} has connected to Discord!')
+    print(f'{bot.user} has connected to Discord!')
 
-@client.event
-async def on_message(message:discord.Message):
-    if message.author == client.user:
-        return
+@bot.command(name='dog')
+async def getDog(ctx):
+    embedImage = discord.Embed()
+    dogUrl = webStuff.getImgUrl()
+    embedImage.set_image(url=dogUrl)
+    await ctx.send(embed=embedImage)
+
+
+@bot.command(name='connect')
+async def joinVoice(ctx, vnum):
+    vnum = int(vnum)
+    vchannel = ctx.guild.voice_channels[vnum]
+    voiceClient = await vchannel.connect()
+
+@bot.command(name="disconnect")
+async def leaveVoice(ctx):
+    await ctx.voice_client.disconnect()
+
+@bot.command(name="play")
+async def playSong(ctx, url):
+    await youtubeDownloader.main(url)
+    fname = str( await youtubeDownloader.getInfo(url))
+    fname +=".mp4"
+    source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(fname))
+    ctx.voice_client.play(source, after=lambda e: print(e) if e else None)
+    await ctx.send("playing track")
     
-    if message.content[0] == prechar:
 
-        if message.content[1:].lower() == 'quote':
-            quotes = ['what is a man?', 'double knot em and forgot em']
-            response = random.choice(quotes)
-            await message.channel.send(response)
-    
-        if message.content[1:].lower() == "dog":
-            embedImage = discord.Embed()
-            dogUrl = webStuff.getImgUrl()
-            embedImage.set_image(url=dogUrl)
-            await message.channel.send(embed=embedImage)
-
-    
-
-client.run(TOKEN)
+bot.run(TOKEN)
