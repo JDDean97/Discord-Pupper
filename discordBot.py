@@ -38,7 +38,6 @@ async def leaveVoice(ctx):
 
 @bot.command(name="play")
 async def playSong(ctx, url):
-    discord.opus.load_opus()
     fname = str( await youtubeDownloader.main(url))
     # fname = str( await youtubeDownloader.getInfo(url))
     fname +=".mp4"
