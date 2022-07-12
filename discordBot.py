@@ -38,8 +38,8 @@ async def leaveVoice(ctx):
 
 @bot.command(name="play")
 async def playSong(ctx, url):
-    await youtubeDownloader.main(url)
-    fname = str( await youtubeDownloader.getInfo(url))
+    fname = str( await youtubeDownloader.main(url))
+    # fname = str( await youtubeDownloader.getInfo(url))
     fname +=".mp4"
     source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(fname))
     ctx.voice_client.play(source, after=lambda e: print(e) if e else None)
