@@ -23,21 +23,21 @@ async def getDog(ctx):
     embedImage = discord.Embed()
     breeds = ['Labrador','Bernese Mountain Dog','Bulldog','Pitbull','Poodle','Australian Shepherd']
     choice = random.randint(0,len(breeds))
-    dogUrl = webStuff.getImgUrl("dog")
+    dogUrl = webStuff.getImgUrl(breeds[choice])
     embedImage.set_image(url=dogUrl)
     dogName = str(breeds[choice])
-    await ctx.send("grabbing pics of" +dogName)
+    await ctx.send("grabbing pics of " +dogName)
     await ctx.send(embed=embedImage)
 
 @bot.command(name='cat')
-async def getDog(ctx):
+async def getCat(ctx):
     embedImage = discord.Embed()
     dogUrl = webStuff.getImgUrl("cat")
     embedImage.set_image(url=dogUrl)
     await ctx.send(embed=embedImage)
 
 @bot.command(name='coyote')
-async def getDog(ctx):
+async def getYote(ctx):
     embedImage = discord.Embed()
     dogUrl = webStuff.getImgUrl("coyote")
     embedImage.set_image(url=dogUrl)
