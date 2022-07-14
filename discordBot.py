@@ -21,10 +21,27 @@ async def on_ready():
 @bot.command(name='dog')
 async def getDog(ctx):
     embedImage = discord.Embed()
-    dogUrl = webStuff.getImgUrl()
+    breeds = ['Labrador','Bernese Mountain Dog','Bulldog','Pitbull','Poodle','Australian Shepherd']
+    choice = random.randint(0,len(breeds))
+    dogUrl = webStuff.getImgUrl("dog")
+    embedImage.set_image(url=dogUrl)
+    dogName = str(breeds[choice])
+    await ctx.send("grabbing pics of" +dogName)
+    await ctx.send(embed=embedImage)
+
+@bot.command(name='cat')
+async def getDog(ctx):
+    embedImage = discord.Embed()
+    dogUrl = webStuff.getImgUrl("cat")
     embedImage.set_image(url=dogUrl)
     await ctx.send(embed=embedImage)
 
+@bot.command(name='coyote')
+async def getDog(ctx):
+    embedImage = discord.Embed()
+    dogUrl = webStuff.getImgUrl("coyote")
+    embedImage.set_image(url=dogUrl)
+    await ctx.send(embed=embedImage)
 
 @bot.command(name='connect')
 async def joinVoice(ctx, vnum):
@@ -39,7 +56,6 @@ async def leaveVoice(ctx):
 @bot.command(name="play")
 async def playSong(ctx, url):
     fname = str( await youtubeDownloader.main(url))
-    # fname = str( await youtubeDownloader.getInfo(url))
     fname +=".mp4"
     source = discord.PCMVolumeTransformer(discord.FFmpegPCMAudio(fname))
     ctx.voice_client.play(source, after=lambda e: print(e) if e else None)
